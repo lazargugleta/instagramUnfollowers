@@ -10,18 +10,21 @@ class InstaUnfollowers:
         self.driver.get("https://instagram.com")
         sleep(2)
         # instagram login
+        accept_all_btn = self.driver.find_element_by_xpath('//button[text()="Accept All"]')
+        accept_all_btn.click()
+        sleep(2)
         username_type = self.driver.find_element_by_xpath("/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[1]/div/label/input")
         username_type.send_keys(username)
         password_type = self.driver.find_element_by_xpath("/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[2]/div/label/input")
         password_type.send_keys(password)
-        ad = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div[2]/button[1]')
-        ad.click()
+        # ad = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div[2]/button[1]')
+        # ad.click()
         log_in = self.driver.find_element_by_xpath('/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[3]/button')
         log_in.click()
-        sleep(2)
+        sleep(5)
 
     def get_unfollowers(self):
-        # change to your username
+        # change to your username (instagram profile URL)
         self.driver.get("https://www.instagram.com/lazar_gugleta/")
         sleep(3)
         Following = self.driver.find_element_by_xpath("//a[contains(@href,'/following')]")
@@ -35,7 +38,7 @@ class InstaUnfollowers:
 
     def get_people(self):
         sleep(2)
-        scroll_box = self.driver.find_element_by_xpath("/html/body/div[5]/div/div/div[2]")
+        scroll_box = self.driver.find_element_by_xpath("/html/body/div[6]/div/div/div[3]")
         prev_height, height = 0, 1
         while prev_height != height:
             prev_height = height
