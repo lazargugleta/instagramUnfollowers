@@ -9,15 +9,17 @@ class InstaUnfollowers:
     def __init__(self, username, password):
         self.driver = webdriver.Chrome(ChromeDriverManager().install())
         self.driver.get("https://instagram.com")
-        override = "off"
+        override = "off"  # Set override if Auto-Login not possible
         sleep(2)
-        # instagram login
+        # Accept cookies
         accept_all_btn = self.driver.find_element(By.CLASS_NAME, 'bIiDR')
         accept_all_btn.click()
         sleep(2)
+        # Check if credentials are empty
         if username == "" or password == "":
             print("Error: No values given in credentials.py, please attempt manual login.")
             override = "manual"
+        # Try auto-login
         if login == "auto" and override == "off":
             username_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[1]/div/label/input")
             username_type.send_keys(username)
@@ -29,23 +31,29 @@ class InstaUnfollowers:
             if self.driver.current_url == "https://instagram.com":
                 print("Auto-Login unsuccessful, please attempt manual login.")
                 override = "manual"
+            else:
+                print("Auto-Login successful.")
+        # Expect Manual-Login
         if login == "manual" or override == "manual":
             print("Please log in to your account in the opened window and confirm with any input.")
             print("You can also exit the program with 'exit'")
-            waitinput = input(">> ")
-            if waitinput == "exit":
+            waitforinput = input(">> ")
+            if waitforinput == "exit":
                 quit()
 
     def get_unfollowers(self):
         # Go to given account
         self.driver.get(accountUrl)
         sleep(3)
+        # Get following people
         Following = self.driver.find_element(By.PARTIAL_LINK_TEXT, local2)
         Following.click()
         following = self.get_people()
+        # Get followers
         Followers = self.driver.find_element(By.PARTIAL_LINK_TEXT, local1)
         Followers.click()
         followers = self.get_people()
+        # Get not following people in list
         not_following_back = [user for user in following if user not in followers]
         # print data in ordered list
         not_following_back.sort()
@@ -56,8 +64,10 @@ class InstaUnfollowers:
 
     def get_people(self):  # Get people in list, return as list
         sleep(2)
+        # Access scroll-box
         scroll_box = self.driver.find_element(By.CLASS_NAME, "isgrP")
         prev_height, height = 0, 1
+        # Execute while there are more people to load
         while prev_height != height:
             prev_height = height
             sleep(3)
@@ -65,6 +75,7 @@ class InstaUnfollowers:
                 arguments[0].scrollTo(0, arguments[0].scrollHeight); 
                 return arguments[0].scrollHeight;
                 """, scroll_box)
+        # Get people by anchor elements
         links = scroll_box.find_elements(By.TAG_NAME, 'a')
         names = [name.text for name in links if name.text != '']
         print("Got one list of: " + str(len(names)))
