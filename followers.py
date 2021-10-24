@@ -8,6 +8,8 @@ from credentials import username, password
 class InstaUnfollowers:
     def __init__(self, user, pwd):
         self.driver = webdriver.Chrome(ChromeDriverManager().install())
+        print("--------------------------------")
+        print("WebDriver Manager successfully initialized.")
         self.driver.get("https://instagram.com")
         override = "off"  # Set override if Auto-Login not possible
         sleep(2)
@@ -16,7 +18,7 @@ class InstaUnfollowers:
         accept_all_btn.click()
         sleep(2)
         # Check if credentials are empty
-        if username == "" or password == "":
+        if login == "auto" and (username == "" or password == ""):
             print("Error: No values given in credentials.py, please attempt manual login.")
             override = "manual"
         # Try auto-login
@@ -35,21 +37,25 @@ class InstaUnfollowers:
                 print("Auto-Login successful.")
         # Expect Manual-Login
         if login == "manual" or override == "manual":
-            print("Please log in to your account in the opened window and confirm with any input.")
+            print("Please log in to your account in the opened window and confirm any text and press return.")
             print("You can also exit the program with 'exit'")
             waitforinput = input(">> ")
             if waitforinput == "exit":
                 quit()
+            print("Continue...")
 
     def get_unfollowers(self):
         # Go to given account
+        print("Accessing profile...")
         self.driver.get(accountUrl)
         sleep(3)
         # Get following people
+        print("Getting following people, this might take a while...")
         following_element = self.driver.find_element(By.PARTIAL_LINK_TEXT, local2)
         following_element.click()
         following_list = self.get_people()
         # Get followers
+        print("Getting followers, this might take a while...")
         followers_element = self.driver.find_element(By.PARTIAL_LINK_TEXT, local1)
         followers_element.click()
         followers_list = self.get_people()
@@ -110,6 +116,9 @@ if (login != "auto") and (login != "manual"):
     login = "manual"
 
 # Run bot
+print("Initializing WebDriver Manager")
+print("--------------------------------")
+sleep(1)
 my_bot = InstaUnfollowers(username, password)
 my_bot.get_unfollowers()
 try:
