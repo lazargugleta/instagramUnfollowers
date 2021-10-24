@@ -1,5 +1,6 @@
 # instagramUnfollowers
 This is a fork of lazargugleta/instagramUnfollowers, which I updated to add functionality and remove deprecated statements.
+This program gets the followers and following people of a account and returns the people that don't follow you back.
 
 ## Required packages
 Running this will require:
