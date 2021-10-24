@@ -18,11 +18,11 @@ class InstaUnfollowers:
         accept_all_btn.click()
         sleep(2)
         # Check if credentials are empty
-        if login == "auto" and (username == "" or password == ""):
+        if (login == "auto" or login == "a") and (username == "" or password == ""):
             print("Error: No values given in credentials.py, please attempt manual login.")
             override = "manual"
         # Try auto-login
-        if login == "auto" and override == "off":
+        if (login == "auto" or login == "a") and override == "off":
             username_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[1]/div/label/input")
             username_type.send_keys(user)
             password_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[2]/div/label/input")
@@ -36,8 +36,8 @@ class InstaUnfollowers:
             else:
                 print("Auto-Login successful.")
         # Expect Manual-Login
-        if login == "manual" or override == "manual":
-            print("Please log in to your account in the opened window and confirm any text and press return.")
+        if (login == "manual" or login == "m") or override == "manual":
+            print("Please log in to your account in the opened window and confirm any text and press enter.")
             print("You can also exit the program with 'exit'")
             waitforinput = input(">> ")
             if waitforinput == "exit":
@@ -93,10 +93,10 @@ class InstaUnfollowers:
 # Entry-Point
 print("--------------------------------")
 print("   Instagram Unfollow-Checker")
-print("--------------------------------")
+print("--------------------------------\n")
 # Ask user for account name
 print("Enter the account name you want to check.")
-account = input("The profile has to be accessible from the credentials you set. (public or followed)\n>> ")
+account = input("*The profile has to be accessible from the credentials you set. (public or followed)*\n>> ")
 accountUrl = "https://instagram.com/" + str(account) + "/"
 
 # Ask user for language and set localization
@@ -110,8 +110,8 @@ else:
 
 print("Have you set up your credentials in the credentials.py file?")
 print("You can login manually if you don't have it set up (standard).")
-login = input("Type 'auto' or 'manual'.\n>> ")
-if (login != "auto") and (login != "manual"):
+login = input("Type '[a]uto' or '[m]anual'.\n>> ")
+if login not in {"auto","manual","a","m"}:
     print("Unknown input, automatically selected manual login.")
     login = "manual"
 
