@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from time import sleep
-from creditentials import username, password
+from credentials import username, password
 
 
 class InstaUnfollowers:
