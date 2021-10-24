@@ -9,12 +9,16 @@ class InstaUnfollowers:
     def __init__(self, username, password):
         self.driver = webdriver.Chrome(ChromeDriverManager().install())
         self.driver.get("https://instagram.com")
+        override = "off"
         sleep(2)
         # instagram login
         accept_all_btn = self.driver.find_element(By.CLASS_NAME, 'bIiDR')
         accept_all_btn.click()
         sleep(2)
-        if login == "auto":
+        if username == "" or password == "":
+            print("Error: No values given in credentials.py, please attempt manual login.")
+            override = "manual"
+        if login == "auto" and override == "off":
             username_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[1]/div/label/input")
             username_type.send_keys(username)
             password_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[2]/div/label/input")
@@ -22,7 +26,10 @@ class InstaUnfollowers:
             log_in = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[3]/button')
             log_in.click()
             sleep(5)
-        else:
+            if self.driver.current_url == "https://instagram.com":
+                print("Auto-Login unsuccessful, please attempt manual login.")
+                override = "manual"
+        if login == "manual" or override == "manual":
             print("Please log in to your account in the opened window and confirm with any input.")
             print("You can also exit the program with 'exit'")
             waitinput = input(">> ")
