@@ -85,6 +85,9 @@ class InstaUnfollowers:
 
 
 # Entry-Point
+print("--------------------------------")
+print("   Instagram Unfollow-Checker")
+print("--------------------------------")
 # Ask user for account name
 print("Enter the account name you want to check.")
 account = input("The profile has to be accessible from the credentials you set. (public or followed)\n>> ")
