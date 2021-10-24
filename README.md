@@ -36,4 +36,4 @@ Then, enter how you want to login. If there are no credentials saved or the auto
 After that, the program will go through the follower and the followed list, store both of them in sepereate lists, and return a sorted list that contains only the people that don't follow you back.
 
 ## Note
-For accurate results I recommend using your own account and not another one. While debugging I discovered that when using another account to scan a differen account, the people in the list are about 5% less.
+For accurate results I recommend using your own account and not another one. While debugging I discovered that when using another account to scan a different account, the people in the list are about 5% less.
