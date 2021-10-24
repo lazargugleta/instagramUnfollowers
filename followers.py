@@ -14,15 +14,20 @@ class InstaUnfollowers:
         accept_all_btn = self.driver.find_element(By.CLASS_NAME, 'bIiDR')
         accept_all_btn.click()
         sleep(2)
-        username_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[1]/div/label/input")
-        username_type.send_keys(username)
-        password_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[2]/div/label/input")
-        password_type.send_keys(password)
-        # ad = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div[2]/button[1]')
-        # ad.click()
-        log_in = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[3]/button')
-        log_in.click()
-        sleep(5)
+        if login == "auto":
+            username_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[1]/div/label/input")
+            username_type.send_keys(username)
+            password_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[2]/div/label/input")
+            password_type.send_keys(password)
+            log_in = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[3]/button')
+            log_in.click()
+            sleep(5)
+        else:
+            print("Please log in to your account in the opened window and confirm with any input.")
+            print("You can also exit the program with 'exit'")
+            waitinput = input(">> ")
+            if waitinput == "exit":
+                quit()
 
     def get_unfollowers(self):
         # Go to given account
@@ -61,14 +66,13 @@ class InstaUnfollowers:
         return names
 
 
-
-
 # Ask user for account name
-account = input("Enter the account name you want to check. The profile has to be accessible from the credentials you set. (public or followed)\n>> ")
+print("Enter the account name you want to check.")
+account = input("The profile has to be accessible from the credentials you set. (public or followed)\n>> ")
 accountUrl = "https://instagram.com/" + str(account) + "/"
 
 # Ask user for language and set localization
-language = input("Please select the language you are opening Instagram with.\n[en] English\n[de] German")
+language = input("Please select the language you are opening Instagram with.\n[en] English\n[de] German\n>> ")
 if (language != "en") and (language != "de"):
     print("Unknown input, automatically selected English.")
 if language == "de":
@@ -76,6 +80,12 @@ if language == "de":
 else:
     local1, local2 = "follower", "following"
 
+print("Have you set up your credentials in the credentials.py file?")
+print("You can login manually if you don't have it set up (standard).")
+login = input("Type 'auto' or 'manual'.\n>> ")
+if (login != "auto") and (login != "manual"):
+    print("Unknown input, automatically selected manual login.")
+    login = "manual"
 
 my_bot = InstaUnfollowers(username, password)
 my_bot.get_unfollowers()
