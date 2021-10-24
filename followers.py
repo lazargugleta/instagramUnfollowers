@@ -1,7 +1,8 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
 from time import sleep
 from creditentials import username, password
-from webdriver_manager.chrome import ChromeDriverManager
 
 
 class InstaUnfollowers:
@@ -10,35 +11,40 @@ class InstaUnfollowers:
         self.driver.get("https://instagram.com")
         sleep(2)
         # instagram login
-        accept_all_btn = self.driver.find_element_by_xpath('//button[text()="Accept All"]')
+        accept_all_btn = self.driver.find_element(By.CLASS_NAME, 'bIiDR')
         accept_all_btn.click()
         sleep(2)
-        username_type = self.driver.find_element_by_xpath("/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[1]/div/label/input")
+        username_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[1]/div/label/input")
         username_type.send_keys(username)
-        password_type = self.driver.find_element_by_xpath("/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[2]/div/label/input")
+        password_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[2]/div/label/input")
         password_type.send_keys(password)
         # ad = self.driver.find_element_by_xpath('/html/body/div[2]/div/div/div/div[2]/button[1]')
         # ad.click()
-        log_in = self.driver.find_element_by_xpath('/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[3]/button')
+        log_in = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[3]/button')
         log_in.click()
         sleep(5)
 
     def get_unfollowers(self):
-        # change to your username (instagram profile URL)
-        self.driver.get("https://www.instagram.com/lazar_gugleta/")
+        # Go to given account
+        self.driver.get(accountUrl)
         sleep(3)
-        Following = self.driver.find_element_by_xpath("//a[contains(@href,'/following')]")
+        Following = self.driver.find_element(By.PARTIAL_LINK_TEXT, local2)
         Following.click()
         following = self.get_people()
-        Followers = self.driver.find_element_by_xpath("//a[contains(@href,'/followers')]")
+        Followers = self.driver.find_element(By.PARTIAL_LINK_TEXT, local1)
         Followers.click()
         followers = self.get_people()
         not_following_back = [user for user in following if user not in followers]
-        print(not_following_back)
+        # print data in ordered list
+        not_following_back.sort()
+        print("These people are not following you:")
+        for name in not_following_back:
+            print(name)
+        print("Total: " + str(len(not_following_back)))
 
-    def get_people(self):
+    def get_people(self):  # Get people in list, return as list
         sleep(2)
-        scroll_box = self.driver.find_element_by_xpath("/html/body/div[6]/div/div/div[3]")
+        scroll_box = self.driver.find_element(By.CLASS_NAME, "isgrP")
         prev_height, height = 0, 1
         while prev_height != height:
             prev_height = height
@@ -47,11 +53,28 @@ class InstaUnfollowers:
                 arguments[0].scrollTo(0, arguments[0].scrollHeight); 
                 return arguments[0].scrollHeight;
                 """, scroll_box)
-        links = scroll_box.find_elements_by_tag_name('a')
+        links = scroll_box.find_elements(By.TAG_NAME, 'a')
         names = [name.text for name in links if name.text != '']
-        close = self.driver.find_element_by_xpath("/html/body/div[5]/div/div/div[1]/div/div[2]/button")
-        close.click()
+        print("Got one list of: " + str(len(names)))
+        self.driver.get(accountUrl)
+        sleep(5)
         return names
+
+
+
+
+# Ask user for account name
+account = input("Enter the account name you want to check. The profile has to be accessible from the credentials you set. (public or followed)\n>> ")
+accountUrl = "https://instagram.com/" + str(account) + "/"
+
+# Ask user for language and set localization
+language = input("Please select the language you are opening Instagram with.\n[en] English\n[de] German")
+if (language != "en") and (language != "de"):
+    print("Unknown input, automatically selected English.")
+if language == "de":
+    local1, local2 = "Abonnenten", "abonniert"
+else:
+    local1, local2 = "follower", "following"
 
 
 my_bot = InstaUnfollowers(username, password)
