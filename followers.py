@@ -6,7 +6,7 @@ from credentials import username, password
 
 
 class InstaUnfollowers:
-    def __init__(self, username, password):
+    def __init__(self, user, pwd):
         self.driver = webdriver.Chrome(ChromeDriverManager().install())
         self.driver.get("https://instagram.com")
         override = "off"  # Set override if Auto-Login not possible
@@ -22,9 +22,9 @@ class InstaUnfollowers:
         # Try auto-login
         if login == "auto" and override == "off":
             username_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[1]/div/label/input")
-            username_type.send_keys(username)
+            username_type.send_keys(user)
             password_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[2]/div/label/input")
-            password_type.send_keys(password)
+            password_type.send_keys(pwd)
             log_in = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[3]/button')
             log_in.click()
             sleep(5)
@@ -46,15 +46,15 @@ class InstaUnfollowers:
         self.driver.get(accountUrl)
         sleep(3)
         # Get following people
-        Following = self.driver.find_element(By.PARTIAL_LINK_TEXT, local2)
-        Following.click()
-        following = self.get_people()
+        following_element = self.driver.find_element(By.PARTIAL_LINK_TEXT, local2)
+        following_element.click()
+        following_list = self.get_people()
         # Get followers
-        Followers = self.driver.find_element(By.PARTIAL_LINK_TEXT, local1)
-        Followers.click()
-        followers = self.get_people()
+        followers_element = self.driver.find_element(By.PARTIAL_LINK_TEXT, local1)
+        followers_element.click()
+        followers_list = self.get_people()
         # Get not following people in list
-        not_following_back = [user for user in following if user not in followers]
+        not_following_back = [user for user in following_list if user not in followers_list]
         # print data in ordered list
         not_following_back.sort()
         print("These people are not following you:")
@@ -84,6 +84,7 @@ class InstaUnfollowers:
         return names
 
 
+# Entry-Point
 # Ask user for account name
 print("Enter the account name you want to check.")
 account = input("The profile has to be accessible from the credentials you set. (public or followed)\n>> ")
@@ -105,6 +106,7 @@ if (login != "auto") and (login != "manual"):
     print("Unknown input, automatically selected manual login.")
     login = "manual"
 
+# Run bot
 my_bot = InstaUnfollowers(username, password)
 my_bot.get_unfollowers()
 try:
