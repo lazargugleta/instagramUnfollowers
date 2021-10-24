@@ -13,7 +13,7 @@ Setting this up is relatively easy. Open credentials.py and you will find this:
 username = ""
 password = ""
 ```
-Set as username the account you want to access and as password the password for that account.
+Set as username the account you want to access Instagram with and as password the password for that account.
 Note that you cannot use accounts that are secured by Two-Factor-Authentication.
 
 I recommend creating a new account and use that for this program.
