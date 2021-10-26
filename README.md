@@ -1,5 +1,5 @@
 # instagramUnfollowers
-This program gets the followers and following people of a account and returns the people that don't follow you back.
+This program lets you see the people that are not following a provided account back.
 <p align="center">
   <kbd>
   <img src="https://i.imgur.com/qxAqSvD.jpg" alt="drawing" width="250" style="border-radius:50%" align="center"/>
