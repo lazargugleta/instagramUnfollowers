@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from time import sleep
 from credentials import username, password
@@ -7,7 +8,7 @@ from credentials import username, password
 
 class InstaUnfollowers:
     def __init__(self, user, pwd):
-        self.driver = webdriver.Chrome(ChromeDriverManager().install())
+        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
         print("--------------------------------")
         print("WebDriver Manager successfully initialized.")
         self.driver.get("https://instagram.com")
@@ -71,7 +72,7 @@ class InstaUnfollowers:
     def get_people(self):  # Get people in list, return as list
         sleep(2)
         # Access scroll-box
-        scroll_box = self.driver.find_element(By.CLASS_NAME, "isgrP")
+        scroll_box = self.driver.find_element(By.CLASS_NAME, "_aano")
         prev_height, height = 0, 1
         # Execute while there are more people to load
         while prev_height != height:
