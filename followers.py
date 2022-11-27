@@ -15,22 +15,25 @@ class InstaUnfollowers:
         override = "off"  # Set override if Auto-Login not possible
         sleep(2)
         # Accept cookies
-        accept_all_btn = self.driver.find_element(By.CLASS_NAME, 'bIiDR')
-        accept_all_btn.click()
-        sleep(2)
+        try:
+            accept_all_btn = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/button[2]')
+            accept_all_btn.click()
+            sleep(2)
+        except:
+            pass
         # Check if credentials are empty
         if (login == "auto" or login == "a") and (username == "" or password == ""):
             print("Error: No values given in credentials.py, please attempt manual login.")
             override = "manual"
         # Try auto-login
         if (login == "auto" or login == "a") and override == "off":
-            username_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[1]/div/label/input")
+            username_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/div/div/div/div[1]/div/div/div/div[1]/section/main/article/div[2]/div[1]/div[2]/form/div/div[1]/div/label/input")
             username_type.send_keys(user)
-            password_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[2]/div/label/input")
+            password_type = self.driver.find_element(By.XPATH, "/html/body/div[1]/div/div/div/div[1]/div/div/div/div[1]/section/main/article/div[2]/div[1]/div[2]/form/div/div[2]/div/label/input")
             password_type.send_keys(pwd)
-            log_in = self.driver.find_element(By.XPATH, '/html/body/div[1]/section/main/article/div[2]/div[1]/div/form/div/div[3]/button')
+            log_in = self.driver.find_element(By.XPATH, '/html/body/div[1]/div/div/div/div[1]/div/div/div/div[1]/section/main/article/div[2]/div[1]/div[2]/form/div/div[3]/button')
             log_in.click()
-            sleep(5)
+            sleep(8)
             if self.driver.current_url == "https://instagram.com":
                 print("Auto-Login unsuccessful, please attempt manual login.")
                 override = "manual"
